@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM History 06 &mdash; Anthropic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a; --bg-card: #0d1117; --bg-code: #161b22;
+            --text-primary: #e6edf3; --text-secondary: #8b949e;
+            --accent: #A371F7; --accent-dim: #A371F744; --accent-glow: #A371F733;
+            --accent-2: #FF7B72; --accent-3: #F0A726; --accent-4: #3FB950;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 900px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-body); font-size: 17px; line-height: 1.7; overflow-x: hidden; }
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem 1.5rem; text-align: center; position: relative; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 700px; height: 600px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+        .hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; color: var(--text-primary); line-height: 1.2; margin-bottom: 1rem; }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle { font-size: 1.1rem; color: var(--text-secondary); max-width: 640px; margin-bottom: 2rem; }
+        .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2.5rem; }
+        .tag { font-family: var(--font-mono); font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); background: var(--accent-dim); white-space: nowrap; }
+        .tag.r { border-color: var(--accent-2); color: var(--accent-2); background: rgba(255,123,114,0.10); }
+        .tag.y { border-color: var(--accent-3); color: var(--accent-3); background: rgba(240,167,38,0.10); }
+        .tag.g { border-color: var(--accent-4); color: var(--accent-4); background: rgba(63,185,80,0.10); }
+        .pipeline { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.25rem; margin-bottom: 1rem; max-width: var(--max-width); }
+        .pipeline-step { font-family: var(--font-mono); font-size: 0.7rem; padding: 0.3rem 0.7rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; color: var(--text-secondary); white-space: nowrap; }
+        .pipeline-arrow { color: var(--accent); font-size: 0.9rem; font-weight: 700; }
+        .slide { min-height: 100vh; max-width: var(--max-width); margin: 0 auto; padding: 4rem 1.5rem; position: relative; display: flex; flex-direction: column; justify-content: center; }
+        .slide-number { font-family: var(--font-display); font-size: 5rem; font-weight: 700; color: var(--accent-dim); position: absolute; top: 2rem; right: 1.5rem; line-height: 1; user-select: none; }
+        .slide h2 { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; color: var(--accent); margin-bottom: 1.5rem; line-height: 1.25; }
+        .slide h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; color: var(--text-primary); margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .slide p { margin-bottom: 1rem; color: var(--text-secondary); }
+        .slide p strong { color: var(--text-primary); }
+        .slide ul, .slide ol { margin-bottom: 1rem; padding-left: 1.5rem; color: var(--text-secondary); }
+        .slide li { margin-bottom: 0.4rem; }
+        .slide li strong { color: var(--text-primary); }
+        .slide code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-code); padding: 0.1rem 0.35rem; border-radius: 3px; color: var(--accent); }
+        .table-wrap { overflow-x: auto; margin: 1.25rem 0; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background: var(--bg-code); color: var(--accent); font-weight: 600; text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-family: var(--font-display); white-space: nowrap; }
+        td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) td { background: rgba(13, 17, 23, 0.5); }
+        .diagram-grid { display: grid; gap: 0.75rem; margin: 1.5rem 0; padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; }
+        .diagram-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+        .diagram-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .diagram-panel { padding: 1rem; background: var(--bg-code); border: 1px solid var(--border); border-radius: 6px; }
+        .diagram-panel.accent-border { border-left: 3px solid var(--accent); }
+        .diagram-panel.r { border-left: 3px solid var(--accent-2); }
+        .diagram-panel.y { border-left: 3px solid var(--accent-3); }
+        .diagram-panel.g { border-left: 3px solid var(--accent-4); }
+        .diagram-panel h4 { font-family: var(--font-display); font-size: 1rem; color: var(--accent); margin-bottom: 0.5rem; }
+        .diagram-panel.r h4 { color: var(--accent-2); }
+        .diagram-panel.y h4 { color: var(--accent-3); }
+        .diagram-panel.g h4 { color: var(--accent-4); }
+        .diagram-panel p, .diagram-panel ul { font-size: 0.9rem; }
+        .callout { background: var(--bg-card); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+        .callout p { margin-bottom: 0; }
+        .callout .callout-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+        .callout.r { border-left-color: var(--accent-2); } .callout.r .callout-label { color: var(--accent-2); }
+        .callout.y { border-left-color: var(--accent-3); } .callout.y .callout-label { color: var(--accent-3); }
+        .callout.g { border-left-color: var(--accent-4); } .callout.g .callout-label { color: var(--accent-4); }
+        .quote { font-family: var(--font-display); font-size: 1.15rem; font-style: italic; color: var(--text-primary); padding: 1rem 1.5rem; border-left: 3px solid var(--accent); background: var(--bg-card); margin: 1.25rem 0; border-radius: 0 8px 8px 0; }
+        .quote .attr { display: block; margin-top: 0.5rem; font-style: normal; font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-mono); }
+        .contents-list { list-style: none; padding-left: 0; counter-reset: contents; }
+        .contents-list li { counter-increment: contents; padding: 0.6rem 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 1rem; }
+        .contents-list li:last-child { border-bottom: none; }
+        .contents-list li::before { content: counter(contents, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); min-width: 2rem; }
+        .contents-list a { color: var(--text-primary); text-decoration: none; }
+        .contents-list a:hover { color: var(--accent); }
+        .footer { text-align: center; padding: 3rem 1.5rem; color: var(--text-secondary); font-size: 0.85rem; border-top: 1px solid var(--border); max-width: var(--max-width); margin: 0 auto; }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .person-card { display: grid; grid-template-columns: 90px 1fr; gap: 1rem; padding: 1rem; background: var(--bg-code); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 0.6rem; }
+        .person-photo { width: 90px; height: 90px; border-radius: 50%; background: var(--accent-dim); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--accent); }
+        .person-card h4 { font-family: var(--font-display); margin-bottom: 0.2rem; color: var(--text-primary); }
+        .person-card .role { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+        .person-card p { font-size: 0.88rem; margin: 0; }
+        @media (max-width: 640px) {
+            .slide { padding: 3rem 1rem; min-height: auto; }
+            .slide-number { font-size: 3rem; top: 1.5rem; right: 1rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .diagram-grid.cols-2, .diagram-grid.cols-3 { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.8rem; }
+            table { font-size: 0.78rem; }
+            .person-card { grid-template-columns: 60px 1fr; }
+            .person-photo { width: 60px; height: 60px; font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="series-label">LLM History Series &mdash; Presentation 06</div>
+    <h1><span class="accent">Anthropic</span> &mdash; The Safety-First Frontier Lab</h1>
+    <p class="subtitle">Founded in 2021 by people who left OpenAI because they thought safety should be the centre of the work, not an adjacent function. Five years on, it is one of three western frontier labs and runs the most-trusted assistant in the developer market. The story of how that combination came to be.</p>
+
+    <div class="tags">
+        <span class="tag">2021&ndash;2026</span>
+        <span class="tag y">Dario Amodei</span><span class="tag y">Daniela Amodei</span>
+        <span class="tag g">Constitutional AI</span><span class="tag g">RSP</span>
+        <span class="tag">Claude 1&hellip;4.7</span><span class="tag r">Mech Interp</span>
+    </div>
+
+    <div class="pipeline">
+        <span class="pipeline-step">Founding (2021)</span>
+        <span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Constitutional AI (2022)</span>
+        <span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Claude 1 (2023)</span>
+        <span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">RSP (Sep 2023)</span>
+        <span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Computer Use (Oct 2024)</span>
+        <span class="pipeline-arrow">&rarr;</span>
+        <span class="pipeline-step">Claude 4.x (2025&ndash;26)</span>
+    </div>
+</header>
+
+<section class="slide" id="slide-00">
+    <div class="slide-number">00</div>
+    <h2>What This Deck Covers</h2>
+    <p>Anthropic as an organisation: the founding bargain, the people, the bets, the structure, and the ongoing argument about whether the bargain holds. Like the OpenAI deck, the technical content of Claude itself is in the architecture and safety sub-hubs of the LLMs site; this is the lab as an institution.</p>
+    <ul class="contents-list">
+        <li><a href="#slide-01">The Founding (2021) &mdash; Why People Left OpenAI</a></li>
+        <li><a href="#slide-02">The Amodeis and the Six Co-Founders</a></li>
+        <li><a href="#slide-03">The PBC Structure and the Long-Term Benefit Trust</a></li>
+        <li><a href="#slide-04">Constitutional AI &mdash; the Founding Technical Bet</a></li>
+        <li><a href="#slide-05">The Claude Line (1 &rarr; 4.7)</a></li>
+        <li><a href="#slide-06">Responsible Scaling Policy &amp; the ASL Framework</a></li>
+        <li><a href="#slide-07">Mechanistic Interpretability &mdash; the Anthropic Programme</a></li>
+        <li><a href="#slide-08">Computer Use, Claude Code, MCP &mdash; the Agent Era</a></li>
+        <li><a href="#slide-09">The Funding History &mdash; Google, Amazon, Spark, others</a></li>
+        <li><a href="#slide-10">Anthropic Today &mdash; Org, Culture, External Posture</a></li>
+        <li><a href="#slide-11">The Argument &mdash; Why Build It At All?</a></li>
+        <li><a href="#slide-12">Cheat Sheet</a></li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-01">
+    <div class="slide-number">01</div>
+    <h2>The Founding (2021) &mdash; Why People Left OpenAI</h2>
+    <p>Anthropic was founded in early 2021 (incorporated in February, announced publicly later that year) by a group of senior researchers who had left OpenAI within a few months of each other in late 2020 and early 2021. The lab opened in San Francisco's SoMa district with around seven people; it announced a $124 M Series A in May 2021.</p>
+
+    <p>The founders' public account of the departure has been consistent: a disagreement about <strong>how directly safety research should drive frontier deployment decisions</strong>. Not a hostile split &mdash; the Amodeis have spoken positively of OpenAI in subsequent interviews &mdash; but a genuine difference in emphasis large enough to justify a new institution.</p>
+
+    <div class="quote">
+        We thought it was important to have an organisation that was focused first and foremost on safety, and where the safety researchers had a say in deployment decisions.
+        <span class="attr">&mdash; Dario Amodei, in multiple interviews after the founding (paraphrased; his framings vary slightly across appearances).</span>
+    </div>
+
+    <h3>The pre-Anthropic context</h3>
+    <p>Several of the founders had been the most senior alignment-focused researchers at OpenAI. Dario Amodei was VP of Research; his sister Daniela was head of operations; Tom Brown had led the GPT-3 effort; Sam McCandlish had co-authored the Scaling Laws paper; Jared Kaplan had been the lead author on it; Chris Olah had been doing distill.pub-style mechanistic interpretability work that was pulling in a different direction from the rest of OpenAI's research portfolio.</p>
+
+    <div class="callout">
+        <div class="callout-label">A clean characterisation</div>
+        <p>OpenAI had multiple research lines, several of which were the alignment line. Anthropic was an attempt to <em>start</em> a frontier lab where the alignment line was the through-line of the whole organisation rather than one of several. The argument is whether this is actually possible &mdash; whether you can stay at the frontier and let safety constrain decisions in ways the rest of the field will not. The deck's thesis is that, on the evidence so far, the answer is conditional yes.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-02">
+    <div class="slide-number">02</div>
+    <h2>The Amodeis and the Six Co-Founders</h2>
+
+    <div class="person-card">
+        <div class="person-photo">DA</div>
+        <div>
+            <h4>Dario Amodei &mdash; co-founder, CEO</h4>
+            <div class="role">Princeton (BA), Princeton (PhD biophysics) &rarr; Stanford postdoc &rarr; Baidu &rarr; OpenAI VP Research &rarr; Anthropic</div>
+            <p>Italian-American. Trained as a computational biophysicist (his PhD work on retinal neural networks shows up in his AI thinking even today). Joined OpenAI in 2016, ran much of the GPT effort and the safety research line. Public face of the company. Famously thoughtful in interviews; his <a href="https://darioamodei.com/machines-of-loving-grace">Machines of Loving Grace essay (2024)</a> is one of the more carefully reasoned visions of beneficial AI from a frontier-lab CEO. Personally serious about catastrophic risk and equally serious about building the technology anyway, on the argument that someone will and it had better be people who care.</p>
+        </div>
+    </div>
+
+    <div class="person-card">
+        <div class="person-photo">DA</div>
+        <div>
+            <h4>Daniela Amodei &mdash; co-founder, President</h4>
+            <div class="role">UC Santa Cruz &rarr; political organising &rarr; Stripe (head of risk and operations) &rarr; OpenAI VP Operations &rarr; Anthropic</div>
+            <p>Worked in political organising and at Stripe before OpenAI; her operational background is unusually diverse for a frontier-lab co-founder. Runs the company day-to-day &mdash; org structure, policy, public-engagement. The pairing with Dario is genuinely complementary: she is the operational and external lead, he is the research and strategic lead.</p>
+        </div>
+    </div>
+
+    <h3>The other six co-founders</h3>
+    <div class="diagram-grid cols-3">
+        <div class="diagram-panel accent-border">
+            <h4>Tom Brown</h4>
+            <p>OpenAI lead author on GPT-3. The senior pretraining engineer at Anthropic.</p>
+        </div>
+        <div class="diagram-panel accent-border">
+            <h4>Sam McCandlish</h4>
+            <p>Theoretical physicist (Stanford). Co-author Scaling Laws. Senior research lead.</p>
+        </div>
+        <div class="diagram-panel accent-border">
+            <h4>Jared Kaplan</h4>
+            <p>Theoretical physicist, Johns Hopkins faculty (now on leave). Lead author on Scaling Laws. Anthropic Chief Scientist for several years.</p>
+        </div>
+        <div class="diagram-panel accent-border">
+            <h4>Jack Clarke</h4>
+            <p>Former AI policy lead at OpenAI; UK government adviser. Heads Policy at Anthropic. Author of the long-running <a href="https://importai.substack.com">Import AI</a> newsletter.</p>
+        </div>
+        <div class="diagram-panel accent-border">
+            <h4>Chris Olah</h4>
+            <p>Self-taught researcher; ran the original distill.pub. Sets the direction of the mechanistic-interpretability programme. One of the most distinctive scientific voices in the lab.</p>
+        </div>
+        <div class="diagram-panel accent-border">
+            <h4>Jared Mueller, Tom Henighan, others</h4>
+            <p>Senior research / engineering co-founders (the founder list of "around eight" varies depending on whether you count the very-earliest hires). The lab's culture is unusually flat for a research org of its size.</p>
+        </div>
+    </div>
+
+    <div class="callout y">
+        <div class="callout-label">Several key joiners after founding</div>
+        <p><strong>Jan Leike</strong> joined from OpenAI in 2024 after the November 2023 board crisis. <strong>John Schulman</strong> followed in late 2024. <strong>Mike Lewis</strong> from FAIR. <strong>Daniel Kokotajlo</strong> from OpenAI's governance team. The "Anthropic is the place ex-OpenAI alignment people go" pattern that was implicit in the founding has become explicit by 2025.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-03">
+    <div class="slide-number">03</div>
+    <h2>The PBC Structure and the Long-Term Benefit Trust</h2>
+    <p>Anthropic incorporated in 2021 as a <strong>Public Benefit Corporation (PBC)</strong> in Delaware. PBCs are for-profit but are required to balance shareholder returns against a stated public benefit, in Anthropic's case <em>"the responsible development and maintenance of advanced AI for the long-term benefit of humanity"</em>. PBC directors have legal cover to consider mission alongside profit.</p>
+
+    <p>In September 2023 the lab introduced a second governance instrument, the <strong>Long-Term Benefit Trust</strong>:</p>
+
+    <div class="diagram-grid cols-2">
+        <div class="diagram-panel accent-border">
+            <h4>How the LTBT works</h4>
+            <ul>
+                <li>An independent body of five trustees who do not hold equity in Anthropic.</li>
+                <li>Has the right to elect a majority of the Anthropic board over time.</li>
+                <li>Trustees rotate; the trust's purpose is the same long-term-benefit mission.</li>
+                <li>Designed to outlast individual founders, executives or large shareholders.</li>
+            </ul>
+        </div>
+        <div class="diagram-panel y">
+            <h4>What it is meant to prevent</h4>
+            <ul>
+                <li>A repeat of the OpenAI structural collapse where the non-profit board could not enforce its will.</li>
+                <li>Acquisition pressure from a future strategic investor.</li>
+                <li>Founders themselves drifting from the mission once vested.</li>
+                <li>Standard public-company shareholder primacy if the company eventually IPOs.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="callout">
+        <div class="callout-label">Honest accounting</div>
+        <p>The PBC + LTBT structure is an attempt to do better than OpenAI's hybrid form, but it is untested under stress. It has not yet been tested in a situation where the company's commercial interests and the LTBT's mission view diverged sharply. Anthropic itself describes the structure as <em>experimental</em>, and the trustees have publicly said the same. The actual durability of governance constraints is something we will only know if and when stress applies.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-04">
+    <div class="slide-number">04</div>
+    <h2>Constitutional AI &mdash; the Founding Technical Bet</h2>
+    <p>The first major technical paper out of Anthropic was <strong>Constitutional AI: Harmlessness from AI Feedback (Bai et al, December 2022)</strong>. It sets the alignment-research orientation of the lab.</p>
+
+    <h3>The idea in two paragraphs</h3>
+    <p>RLHF as practised at OpenAI in 2022 trained a reward model from human comparisons of outputs. Constitutional AI replaces (or supplements) the human comparisons with <em>AI-generated</em> comparisons, where another model evaluates outputs against an explicit set of principles &mdash; the "constitution".</p>
+
+    <p>The constitution is a list of plain-English principles ("don't help with illegal activities", "explain your reasoning", "avoid stereotypes", etc.). The model critiques and revises its own outputs against these principles, and the revised outputs become training signal. Far more scalable than human labelling, and more transparent than an opaque reward model.</p>
+
+    <div class="diagram-grid cols-2">
+        <div class="diagram-panel accent-border">
+            <h4>Why it mattered for the field</h4>
+            <ul>
+                <li>Demonstrated alignment-research-as-product engine: a paper from the safety team becomes the core technique behind shipping a model.</li>
+                <li>Made the values built into a model legible &mdash; you can read them.</li>
+                <li>Set the template for RLAIF (RL from AI Feedback) at every other lab.</li>
+            </ul>
+        </div>
+        <div class="diagram-panel y">
+            <h4>Why it mattered for Anthropic</h4>
+            <ul>
+                <li>Clear technical identity from day one.</li>
+                <li>The Constitution is published and editable; reflects Anthropic's stated values explicitly.</li>
+                <li>Underwrites the lab's external-trust posture: <em>here is how we make Claude behave, and here are the principles, and you can read them</em>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="callout y">
+        <div class="callout-label">The constitutional method continues</div>
+        <p>Successive Claude versions have refined and expanded the Constitution. The 2024 release of <em>Claude's Constitution</em> as a public artefact is one of the few explicit alignment-recipe disclosures from any frontier lab. The Constitution is also the technical mechanism behind <em>Claude's character</em> &mdash; the warmer, more deliberate prose style that Claude users tend to recognise as distinct from GPT-4o or Gemini. It is intentional.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-05">
+    <div class="slide-number">05</div>
+    <h2>The Claude Line (1 &rarr; 4.7)</h2>
+    <p>Anthropic's flagship product line is the Claude family of assistants. Initial release in early 2023, at which point ChatGPT was three months old.</p>
+
+    <div class="table-wrap">
+    <table>
+        <thead><tr><th>Date</th><th>Model</th><th>What it added</th></tr></thead>
+        <tbody>
+            <tr><td>Mar 2023</td><td>Claude 1</td><td>Constitutional AI in production. Strong refusal handling. 100k context window from Claude 1.3.</td></tr>
+            <tr><td>Jul 2023</td><td>Claude 2</td><td>200k context. Stronger reasoning. First broad enterprise contracts.</td></tr>
+            <tr><td>Mar 2024</td><td>Claude 3 (Haiku, Sonnet, Opus)</td><td>Three-tier line. Opus competitive with GPT-4. Vision capability native.</td></tr>
+            <tr><td>Jun 2024</td><td>Claude 3.5 Sonnet</td><td>Step jump on coding benchmarks (HumanEval, SWE-bench). Becomes the default coding model for many teams.</td></tr>
+            <tr><td>Oct 2024</td><td>Claude 3.5 Sonnet (new) + Computer Use</td><td>First production GUI-controlling agent from a frontier lab.</td></tr>
+            <tr><td>2025</td><td>Claude 3.7, Claude 4 (Opus / Sonnet / Haiku), extended thinking</td><td>Test-time-compute integration. Claude becomes one of two top-tier coding models with GPT-5.</td></tr>
+            <tr><td>Late 2025 &rarr; 2026</td><td>Claude 4.5, 4.6, 4.7 with 1 M-token context</td><td>Long-context generally available; agent-style use becomes default for developer audiences.</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>The product strategic posture</h3>
+    <p>Claude has been positioned more strongly toward <strong>developer and enterprise</strong> users than toward consumer chat. ChatGPT outweighs Claude.ai for consumer subscribers; the API and Claude Code dominate developer tooling and a meaningful share of enterprise contracts. The two labs' product strategies have diverged on this axis since 2023.</p>
+
+    <div class="callout g">
+        <div class="callout-label">Claude Code</div>
+        <p>Claude Code &mdash; the CLI product launched in early 2025 &mdash; is one of the more strategically significant Anthropic moves. It positions Claude as a first-class agent for software-engineering work, with terminal access, file-system tools, and a dedicated SDK. By late 2025 it had become a meaningful enterprise revenue line in its own right, and the focal point of much of Anthropic's product investment.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-06">
+    <div class="slide-number">06</div>
+    <h2>Responsible Scaling Policy &amp; the ASL Framework</h2>
+    <p>In September 2023 Anthropic published the first version of its <strong>Responsible Scaling Policy</strong>, a public framework defining capability thresholds at which the lab commits to add specific safety measures or pause development. It was the first such commitment from a frontier lab. Major revisions followed in October 2024 and 2025.</p>
+
+    <h3>The AI Safety Levels (ASL)</h3>
+    <div class="diagram-grid cols-2">
+        <div class="diagram-panel g">
+            <h4>ASL-2 (current Claude)</h4>
+            <p>Models that show early signs of dangerous capabilities &mdash; can be adversarially probed, can produce biology/cyber/chemistry information that is concerning, but no measurable uplift over a determined search-engine user. Standard responsible disclosure, model cards, deployment monitoring.</p>
+        </div>
+        <div class="diagram-panel y">
+            <h4>ASL-3 (anticipated for some 2025/26 models)</h4>
+            <p>Materially uplift a malicious actor on a CBRN threat or autonomous-replication threat. Triggers stronger evaluations, deployment safeguards (jailbreak resistance benchmarks), red-team requirements, and limits on weights distribution.</p>
+        </div>
+        <div class="diagram-panel r">
+            <h4>ASL-4 (not yet reached)</h4>
+            <p>Models capable of substantially autonomously executing tasks that would otherwise require nation-state-level resources. Requires hardened security (intent: defend against well-resourced adversaries including state actors trying to exfiltrate weights), independent red-team approval to deploy, and multi-stakeholder oversight.</p>
+        </div>
+        <div class="diagram-panel r">
+            <h4>ASL-5 and above</h4>
+            <p>Speculative; reserved for models substantially exceeding human-expert capability across most domains. Trigger thresholds and required mitigations are being researched rather than committed to.</p>
+        </div>
+    </div>
+
+    <div class="callout">
+        <div class="callout-label">Why this is structurally important</div>
+        <p>The RSP is one of the few <em>publicly verifiable</em> commitments any frontier lab has made about its own behaviour. The capabilities thresholds are specific; the required mitigations are specific; the lab has bound itself in writing to actions if those thresholds are reached. Critics have noted that thresholds are still set by Anthropic itself, that "uplift" is hard to operationalise, and that "pause" has never been tested. Defenders note that no other frontier lab has even gone this far publicly.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-07">
+    <div class="slide-number">07</div>
+    <h2>Mechanistic Interpretability &mdash; the Anthropic Programme</h2>
+    <p>Mechanistic interpretability is the attempt to reverse-engineer trained neural networks at the level of individual circuits and features &mdash; to understand <em>what computation</em> is happening, not just whether a model gives the right answer. <strong>Chris Olah</strong> has been the central figure in this since the late 2010s, originally at OpenAI, then at Anthropic from the founding.</p>
+
+    <h3>The Anthropic interp programme in stages</h3>
+    <div class="table-wrap">
+    <table>
+        <thead><tr><th>Year</th><th>Result</th><th>What it showed</th></tr></thead>
+        <tbody>
+            <tr><td>2021</td><td>A Mathematical Framework for Transformer Circuits</td><td>Defines the basic building blocks for analysing attention-based circuits.</td></tr>
+            <tr><td>2022</td><td>In-Context Learning and Induction Heads</td><td>Identifies a specific circuit (induction heads) that mechanistically implements in-context learning.</td></tr>
+            <tr><td>2023</td><td>Toy Models of Superposition</td><td>Explains why circuits are hard to identify: features are stored in superposition.</td></tr>
+            <tr><td>2024</td><td>Sparse autoencoders / dictionary learning</td><td>Practical recipe for extracting interpretable features from production models. <em>Scaling Monosemanticity</em> applies this to Claude 3 Sonnet.</td></tr>
+            <tr><td>2025</td><td>Circuit-level intervention experiments</td><td>Reading and editing model behaviour through interpretable features. The first plausibly safety-relevant interpretability tooling.</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="quote">
+        Mechanistic interpretability is the only way I know to detect a deceptively-aligned model before it actually deceives you.
+        <span class="attr">&mdash; Chris Olah, paraphrased from multiple talks. The thesis is that behavioural testing is insufficient because a sufficiently capable model can simulate aligned behaviour during testing.</span>
+    </div>
+
+    <div class="callout y">
+        <div class="callout-label">Why interp is the company's flagship safety-research line</div>
+        <p>Most alignment work is behavioural &mdash; observe outputs, judge them, train. Interp is the bet that this is not enough at higher capability levels, because a sufficiently competent model can pass any behavioural test. If interp succeeds, the lab can <em>look inside</em> a model and verify that its computations are the ones we want. If interp fails &mdash; if the technique does not scale, or what it reveals does not generalise &mdash; the lab's framing of how to deploy frontier systems is in trouble. It is an unusually high-stakes scientific bet, and the lab has accordingly given Olah's team some of the strongest research culture in the field.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-08">
+    <div class="slide-number">08</div>
+    <h2>Computer Use, Claude Code, MCP &mdash; the Agent Era</h2>
+    <p>Anthropic was first to ship several agent-era primitives in production. The agents-and-tools surface area is now the lab's most active product investment.</p>
+
+    <div class="diagram-grid cols-3">
+        <div class="diagram-panel accent-border">
+            <h4>Computer Use (Oct 2024)</h4>
+            <p>Claude takes screenshots, returns mouse-and-keyboard actions, and operates a desktop or browser. First production GUI-control model from a frontier lab. Beat OpenAI to market by three months.</p>
+        </div>
+        <div class="diagram-panel y">
+            <h4>Claude Code (Feb 2025)</h4>
+            <p>CLI agent for software engineering. File-system tools, terminal access, an SDK and a hooks framework. Has been the fastest-growing developer tool in the LLM ecosystem in 2025.</p>
+        </div>
+        <div class="diagram-panel g">
+            <h4>Model Context Protocol (MCP, Nov 2024)</h4>
+            <p>An open JSON-RPC protocol for connecting LLMs to tools and data sources. Designed to be vendor-neutral; OpenAI and Google have since added support. The most successful open standard the field has produced since the Hugging Face <code>transformers</code> library.</p>
+        </div>
+    </div>
+
+    <h3>Why the agent push concentrated at Anthropic</h3>
+    <ul>
+        <li>The lab's safety-research orientation makes it natural to think in terms of <em>action</em>, not just generation.</li>
+        <li>Claude was already strong at coding, which is the prototypical agent task.</li>
+        <li>Strategically, agents shift the user relationship from "answer my question" to "do this for me", which is harder for competitors with stronger consumer-chat brands to match.</li>
+        <li>The MCP open-protocol move is unusual &mdash; opening up the integration layer rather than building a walled garden of plugins. It is consistent with the lab's broader posture of being unusually open about how its tools work.</li>
+    </ul>
+</section>
+
+<section class="slide" id="slide-09">
+    <div class="slide-number">09</div>
+    <h2>The Funding History &mdash; Google, Amazon, Spark, others</h2>
+    <p>Anthropic has raised the second-most capital of any AI start-up after OpenAI. Roughly:</p>
+
+    <div class="table-wrap">
+    <table>
+        <thead><tr><th>Date</th><th>Round</th><th>Lead / notable</th><th>Amount</th></tr></thead>
+        <tbody>
+            <tr><td>May 2021</td><td>Series A</td><td>Jaan Tallinn, Dustin Moskovitz, others</td><td>$124 M</td></tr>
+            <tr><td>Apr 2022</td><td>Series B</td><td>Sam Bankman-Fried (later returned), others</td><td>$580 M</td></tr>
+            <tr><td>2023</td><td>Series C / additional</td><td>Spark, Salesforce, Sound Ventures, others</td><td>~$450 M</td></tr>
+            <tr><td>Sep 2023</td><td>Amazon strategic</td><td>Amazon up to $4 B; AWS preferred cloud</td><td>$4 B (committed)</td></tr>
+            <tr><td>Oct 2023</td><td>Google strategic</td><td>Google up to $2 B; GCP available</td><td>$2 B (committed)</td></tr>
+            <tr><td>2024&ndash;26</td><td>Subsequent strategic rounds</td><td>Amazon further $4 B in 2024; further rounds in 2025</td><td>$15 B+ cumulative</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <p>The unusual thing about the cap table is the dual-cloud strategic arrangement: Amazon and Google are both major investors and both compete to host Anthropic models. <strong>Anthropic explicitly negotiated this dual structure.</strong> Avoiding single-strategic-investor capture is consistent with the LTBT logic.</p>
+
+    <div class="callout">
+        <div class="callout-label">A subtle but important point</div>
+        <p>Anthropic's fundraising posture has been to take strategic capital from cloud providers without granting any of them OpenAI-Microsoft-style preferred status. AWS hosts Claude through Bedrock; GCP hosts Claude through Vertex; Anthropic's own infrastructure runs on both. The lab's strategic independence has held to date, which is a non-trivial achievement given the size of the cheques involved.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-10">
+    <div class="slide-number">10</div>
+    <h2>Anthropic Today &mdash; Org, Culture, External Posture</h2>
+    <p>Anthropic in 2026 is roughly 1,500 people, headquartered in SoMa San Francisco with offices in Seattle, London, Z&uuml;rich and Tokyo (as of 2025). Revenue is publicly reported to be approaching $5 B ARR.</p>
+
+    <div class="diagram-grid cols-3">
+        <div class="diagram-panel accent-border">
+            <h4>The org</h4>
+            <ul>
+                <li>Co-founders still day-to-day involved.</li>
+                <li>Research split into capability, alignment, interpretability, frontier red-team.</li>
+                <li>Product, sales, policy, security, infrastructure as adult engineering functions.</li>
+                <li>Frontier red-team reports outside the deployment chain.</li>
+            </ul>
+        </div>
+        <div class="diagram-panel y">
+            <h4>The culture</h4>
+            <ul>
+                <li>Unusually concentrated on EA / rationalist-adjacent talent in early years; this has diversified.</li>
+                <li>Long, careful internal discussion before product changes.</li>
+                <li>Public character: thoughtful, slightly pessimistic, technically dense, often verbose.</li>
+                <li>External engagement skews toward policy, governance, mech interp.</li>
+            </ul>
+        </div>
+        <div class="diagram-panel g">
+            <h4>The external posture</h4>
+            <ul>
+                <li>Does not chase consumer-chat market share aggressively.</li>
+                <li>Publishes alignment work and parts of the Constitution publicly.</li>
+                <li>Engages substantively with UK AISI, US AISI, and EU AI Office.</li>
+                <li>The CEO writes essays. They are read.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="callout y">
+        <div class="callout-label">A pattern</div>
+        <p>The lab has deliberately built a brand around <em>trust</em> rather than <em>most powerful</em>. In 2023&ndash;24 this was sometimes a commercial constraint &mdash; users on the frontier-capability axis preferred GPT-4. By 2025&ndash;26 with Claude 4.5 / 4.7 the gap has closed and the trust positioning has become commercially valuable rather than constraining. The strategic logic is consistent throughout: be the lab serious people send their hardest decisions to.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-11">
+    <div class="slide-number">11</div>
+    <h2>The Argument &mdash; Why Build It At All?</h2>
+    <p>The deepest critique of Anthropic, made most often by AI-risk-skeptical observers and by some safety-focused people outside the lab, is: <em>if you really believe AGI is dangerous, don't accelerate the frontier. Anything you build, someone else will use as a benchmark to surpass.</em></p>
+
+    <p>Anthropic's standard response has been:</p>
+
+    <div class="diagram-grid cols-2">
+        <div class="diagram-panel accent-border">
+            <h4>The "race to the top" thesis</h4>
+            <ul>
+                <li>The frontier is going to be built whether we participate or not.</li>
+                <li>If we participate, we can shape what frontier deployment looks like.</li>
+                <li>RSP, interp, Constitutional AI propagate to other labs by competitive pressure.</li>
+                <li>We can attract the talent and the contracts that would otherwise go to less-safety-conscious labs.</li>
+            </ul>
+        </div>
+        <div class="diagram-panel r">
+            <h4>The honest critiques</h4>
+            <ul>
+                <li>"Our race-to-the-top is just a race." Building anything advances the field.</li>
+                <li>Commercial pressure compresses safety timelines.</li>
+                <li>The PBC + LTBT structure is untested under stress.</li>
+                <li>If the company's bet is wrong about how to align frontier systems, it has no fallback.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="quote">
+        I am scared of the technology I work on. That fear is the central organising principle of how we build this company.
+        <span class="attr">&mdash; Dario Amodei has expressed this sentiment in multiple interviews and podcasts; the precise phrasing varies but the position has been consistent since the founding.</span>
+    </div>
+
+    <div class="callout y">
+        <div class="callout-label">Where this lands</div>
+        <p>Whether the "race to the top" thesis works empirically is one of the field's important open questions. Five years in, on the evidence available, Anthropic has shipped meaningful safety research, has materially shaped the industry's posture (RSP-style policies are now common), and has not visibly cut corners on safety in deployment. Whether that pattern survives a frontier capability jump that genuinely matters is the test that has not yet happened.</p>
+    </div>
+</section>
+
+<section class="slide" id="slide-12">
+    <div class="slide-number">12</div>
+    <h2>Cheat Sheet</h2>
+
+    <div class="diagram-grid cols-2">
+        <div class="diagram-panel accent-border">
+            <h4>Five turning points</h4>
+            <ul>
+                <li><strong>Feb 2021</strong> &mdash; founded.</li>
+                <li><strong>Dec 2022</strong> &mdash; Constitutional AI paper.</li>
+                <li><strong>Sep 2023</strong> &mdash; Responsible Scaling Policy.</li>
+                <li><strong>Oct 2024</strong> &mdash; Computer Use ships.</li>
+                <li><strong>2025</strong> &mdash; Claude 4 + extended thinking + Claude Code at scale.</li>
+            </ul>
+        </div>
+        <div class="diagram-panel y">
+            <h4>The principals</h4>
+            <ul>
+                <li>Dario Amodei &mdash; CEO.</li>
+                <li>Daniela Amodei &mdash; President.</li>
+                <li>Tom Brown, Sam McCandlish, Jared Kaplan &mdash; senior research.</li>
+                <li>Chris Olah &mdash; mechanistic interp.</li>
+                <li>Jack Clarke &mdash; policy.</li>
+                <li>Jan Leike, John Schulman &mdash; senior alignment joiners 2024.</li>
+            </ul>
+        </div>
+        <div class="diagram-panel g">
+            <h4>Three pillars</h4>
+            <ul>
+                <li>Constitutional AI (alignment recipe).</li>
+                <li>Responsible Scaling Policy (deployment commitments).</li>
+                <li>Mechanistic interpretability (the long bet).</li>
+            </ul>
+        </div>
+        <div class="diagram-panel r">
+            <h4>What's next in the series</h4>
+            <ul>
+                <li>07 &mdash; Google DeepMind: where the transformer came from but the products lagged.</li>
+                <li>08 &mdash; Meta, Mistral, xAI, the rest of the frontier.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>Part of the <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_LLM_History">LLM History series</a> in the <a href="https://github.com/BrendanJamesLynskey/LLMs">LLMs hub</a>.</p>
+    <p style="margin-top: 0.5rem;"><a href="https://brendanjameslynskey.github.io/LLM_History_05_OpenAI/">&larr; 05 OpenAI</a> &middot; <a href="https://brendanjameslynskey.github.io/LLM_History_07_DeepMind_and_Google/">07 DeepMind &rarr;</a></p>
+</footer>
+
+</body>
+</html>
