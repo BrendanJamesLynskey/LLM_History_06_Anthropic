@@ -163,7 +163,7 @@
     </div>
 
     <h3>The pre-Anthropic context</h3>
-    <p>Several of the founders had been the most senior alignment-focused researchers at OpenAI. Dario Amodei was VP of Research; his sister Daniela was head of operations; Tom Brown had led the GPT-3 effort; Sam McCandlish had co-authored the Scaling Laws paper; Jared Kaplan had been the lead author on it; Chris Olah had been doing distill.pub-style mechanistic interpretability work that was pulling in a different direction from the rest of OpenAI's research portfolio.</p>
+    <p>Several of the founders had been the most senior alignment-focused researchers at OpenAI. Dario Amodei was VP of Research; his sister Daniela was VP of Safety and Policy; Tom Brown had led the GPT-3 effort; Sam McCandlish had co-authored the Scaling Laws paper; Jared Kaplan had been the lead author on it; Chris Olah had been doing distill.pub-style mechanistic interpretability work that was pulling in a different direction from the rest of OpenAI's research portfolio.</p>
 
     <div class="callout">
         <div class="callout-label">A clean characterisation</div>
@@ -179,7 +179,7 @@
         <div class="person-photo">DA</div>
         <div>
             <h4>Dario Amodei &mdash; co-founder, CEO</h4>
-            <div class="role">Princeton (BA), Princeton (PhD biophysics) &rarr; Stanford postdoc &rarr; Baidu &rarr; OpenAI VP Research &rarr; Anthropic</div>
+            <div class="role">Caltech &rarr; Stanford (BS physics) &rarr; Princeton (PhD biophysics) &rarr; Stanford Medicine postdoc &rarr; Baidu &rarr; Google Brain &rarr; OpenAI VP Research &rarr; Anthropic</div>
             <p>Italian-American. Trained as a computational biophysicist (his PhD work on retinal neural networks shows up in his AI thinking even today). Joined OpenAI in 2016, ran much of the GPT effort and the safety research line. Public face of the company. Famously thoughtful in interviews; his <a href="https://darioamodei.com/machines-of-loving-grace">Machines of Loving Grace essay (2024)</a> is one of the more carefully reasoned visions of beneficial AI from a frontier-lab CEO. Personally serious about catastrophic risk and equally serious about building the technology anyway, on the argument that someone will and it had better be people who care.</p>
         </div>
     </div>
@@ -188,7 +188,7 @@
         <div class="person-photo">DA</div>
         <div>
             <h4>Daniela Amodei &mdash; co-founder, President</h4>
-            <div class="role">UC Santa Cruz &rarr; political organising &rarr; Stripe (head of risk and operations) &rarr; OpenAI VP Operations &rarr; Anthropic</div>
+            <div class="role">UC Santa Cruz &rarr; global development &amp; political campaigns &rarr; Stripe (early employee, risk) &rarr; OpenAI VP Safety &amp; Policy &rarr; Anthropic</div>
             <p>Worked in political organising and at Stripe before OpenAI; her operational background is unusually diverse for a frontier-lab co-founder. Runs the company day-to-day &mdash; org structure, policy, public-engagement. The pairing with Dario is genuinely complementary: she is the operational and external lead, he is the research and strategic lead.</p>
         </div>
     </div>
@@ -209,21 +209,21 @@
         </div>
         <div class="diagram-panel accent-border">
             <h4>Jack Clark</h4>
-            <p>Former AI policy lead at OpenAI; UK government adviser. Heads Policy at Anthropic. Author of the long-running <a href="https://importai.substack.com">Import AI</a> newsletter.</p>
+            <p>Former Policy Director at OpenAI and ex-technology journalist. Heads Policy at Anthropic. Author of the long-running <a href="https://importai.substack.com">Import AI</a> newsletter.</p>
         </div>
         <div class="diagram-panel accent-border">
             <h4>Chris Olah</h4>
             <p>Self-taught researcher; ran the original distill.pub. Sets the direction of the mechanistic-interpretability programme. One of the most distinctive scientific voices in the lab.</p>
         </div>
         <div class="diagram-panel accent-border">
-            <h4>Jared Mueller, Tom Henighan, others</h4>
-            <p>Senior research / engineering co-founders (the founder list of "around eight" varies depending on whether you count the very-earliest hires). The lab's culture is unusually flat for a research org of its size.</p>
+            <h4>Ben Mann</h4>
+            <p>Early OpenAI engineer and GPT-3 co-author. Has led product and engineering efforts at Anthropic. Completes the commonly cited list of eight co-founders (the two Amodeis plus these six).</p>
         </div>
     </div>
 
     <div class="callout y">
         <div class="callout-label">Several key joiners after founding</div>
-        <p><strong>Jan Leike</strong> joined from OpenAI in 2024 after the November 2023 board crisis. <strong>John Schulman</strong> followed in late 2024. <strong>Mike Lewis</strong> from FAIR. <strong>Daniel Kokotajlo</strong> from OpenAI's governance team. The "Anthropic is the place ex-OpenAI alignment people go" pattern that was implicit in the founding has become explicit by 2025.</p>
+        <p><strong>Jan Leike</strong> joined from OpenAI in May 2024, after OpenAI's Superalignment team was wound down. <strong>John Schulman</strong> followed in August 2024, though he left again in February 2025 to join Thinking Machines Lab. The "Anthropic is the place ex-OpenAI alignment people go" pattern that was implicit in the founding became explicit in 2024.</p>
     </div>
 </section>
 
@@ -292,7 +292,7 @@
 
     <div class="callout y">
         <div class="callout-label">The constitutional method continues</div>
-        <p>Successive Claude versions have refined and expanded the Constitution. The 2024 release of <em>Claude's Constitution</em> as a public artefact is one of the few explicit alignment-recipe disclosures from any frontier lab. The Constitution is also the technical mechanism behind <em>Claude's character</em> &mdash; the warmer, more deliberate prose style that Claude users tend to recognise as distinct from GPT-4o or Gemini. It is intentional.</p>
+        <p>Successive Claude versions have refined and expanded the Constitution. The publication of <em>Claude's Constitution</em> (first released in May 2023) as a public artefact is one of the few explicit alignment-recipe disclosures from any frontier lab. The Constitution is also the technical mechanism behind <em>Claude's character</em> &mdash; the warmer, more deliberate prose style that Claude users tend to recognise as distinct from GPT-4o or Gemini. It is intentional.</p>
     </div>
 </section>
 
@@ -333,11 +333,11 @@
     <h3>The AI Safety Levels (ASL)</h3>
     <div class="diagram-grid cols-2">
         <div class="diagram-panel g">
-            <h4>ASL-2 (current Claude)</h4>
+            <h4>ASL-2 (Claude models through early 2025)</h4>
             <p>Models that show early signs of dangerous capabilities &mdash; can be adversarially probed, can produce biology/cyber/chemistry information that is concerning, but no measurable uplift over a determined search-engine user. Standard responsible disclosure, model cards, deployment monitoring.</p>
         </div>
         <div class="diagram-panel y">
-            <h4>ASL-3 (anticipated for some 2025/26 models)</h4>
+            <h4>ASL-3 (activated May 2025 with Claude Opus 4)</h4>
             <p>Materially uplift a malicious actor on a CBRN threat or autonomous-replication threat. Triggers stronger evaluations, deployment safeguards (jailbreak resistance benchmarks), red-team requirements, and limits on weights distribution.</p>
         </div>
         <div class="diagram-panel r">
@@ -368,9 +368,9 @@
         <tbody>
             <tr><td>2021</td><td>A Mathematical Framework for Transformer Circuits</td><td>Defines the basic building blocks for analysing attention-based circuits.</td></tr>
             <tr><td>2022</td><td>In-Context Learning and Induction Heads</td><td>Identifies a specific circuit (induction heads) that mechanistically implements in-context learning.</td></tr>
-            <tr><td>2023</td><td>Toy Models of Superposition</td><td>Explains why circuits are hard to identify: features are stored in superposition.</td></tr>
+            <tr><td>2022</td><td>Toy Models of Superposition</td><td>Explains why circuits are hard to identify: features are stored in superposition.</td></tr>
             <tr><td>2024</td><td>Sparse autoencoders / dictionary learning</td><td>Practical recipe for extracting interpretable features from production models. <em>Scaling Monosemanticity</em> applies this to Claude 3 Sonnet.</td></tr>
-            <tr><td>2025</td><td>Circuit-level intervention experiments</td><td>Reading and editing model behaviour through interpretable features. The first plausibly safety-relevant interpretability tooling.</td></tr>
+            <tr><td>2025</td><td>Circuit tracing / attribution graphs (<em>On the Biology of a Large Language Model</em>)</td><td>Tracing and intervening on multi-step computations in Claude 3.5 Haiku through interpretable features. The first plausibly safety-relevant interpretability tooling.</td></tr>
         </tbody>
     </table>
     </div>
@@ -425,11 +425,13 @@
         <thead><tr><th>Date</th><th>Round</th><th>Lead / notable</th><th>Amount</th></tr></thead>
         <tbody>
             <tr><td>May 2021</td><td>Series A</td><td>Jaan Tallinn, Dustin Moskovitz, others</td><td>$124 M</td></tr>
-            <tr><td>Apr 2022</td><td>Series B</td><td>Sam Bankman-Fried (later returned), others</td><td>$580 M</td></tr>
-            <tr><td>2023</td><td>Series C / additional</td><td>Spark, Salesforce, Sound Ventures, others</td><td>~$450 M</td></tr>
+            <tr><td>Apr 2022</td><td>Series B</td><td>Sam Bankman-Fried / FTX (stake later sold by the FTX estate), others</td><td>$580 M</td></tr>
+            <tr><td>May 2023</td><td>Series C</td><td>Spark Capital (lead), Google, Salesforce Ventures, Zoom, others</td><td>~$450 M</td></tr>
             <tr><td>Sep 2023</td><td>Amazon strategic</td><td>Amazon up to $4 B; AWS preferred cloud</td><td>$4 B (committed)</td></tr>
             <tr><td>Oct 2023</td><td>Google strategic</td><td>Google up to $2 B; GCP available</td><td>$2 B (committed)</td></tr>
-            <tr><td>2024&ndash;26</td><td>Subsequent strategic rounds</td><td>Amazon further $4 B in 2024; further rounds in 2025</td><td>$15 B+ cumulative</td></tr>
+            <tr><td>Nov 2024</td><td>Amazon strategic</td><td>Amazon's second tranche (total $8 B)</td><td>$4 B</td></tr>
+            <tr><td>Mar 2025</td><td>Series E</td><td>Lightspeed (lead); $61.5 B post-money</td><td>$3.5 B</td></tr>
+            <tr><td>Sep 2025</td><td>Series F</td><td>ICONIQ (lead); $183 B post-money</td><td>$13 B</td></tr>
         </tbody>
     </table>
     </div>
@@ -445,7 +447,7 @@
 <section class="slide" id="slide-10">
     <div class="slide-number">10</div>
     <h2>Anthropic Today &mdash; Org, Culture, External Posture</h2>
-    <p>Anthropic in 2026 is roughly 1,500 people, headquartered in SoMa San Francisco with offices in Seattle, London, Z&uuml;rich and Tokyo (as of 2025). Revenue is publicly reported to be approaching $5 B ARR.</p>
+    <p>Anthropic is headquartered in San Francisco, with offices including Seattle, New York, London, Dublin, Z&uuml;rich and Tokyo. Revenue has grown very fast: annualised run-rate revenue was reported at about $1 B at the start of 2025 and over $5 B by August 2025.</p>
 
     <div class="diagram-grid cols-3">
         <div class="diagram-panel accent-border">
@@ -544,8 +546,9 @@
                 <li>Daniela Amodei &mdash; President.</li>
                 <li>Tom Brown, Sam McCandlish, Jared Kaplan &mdash; senior research.</li>
                 <li>Chris Olah &mdash; mechanistic interp.</li>
-                <li>Jack Clarke &mdash; policy.</li>
-                <li>Jan Leike, John Schulman &mdash; senior alignment joiners 2024.</li>
+                <li>Jack Clark &mdash; policy.</li>
+                <li>Ben Mann &mdash; co-founder, product &amp; engineering.</li>
+                <li>Jan Leike &mdash; alignment, joined 2024.</li>
             </ul>
         </div>
         <div class="diagram-panel g">
