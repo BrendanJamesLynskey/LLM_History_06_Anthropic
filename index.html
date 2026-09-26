@@ -306,11 +306,11 @@
         <thead><tr><th>Date</th><th>Model</th><th>What it added</th></tr></thead>
         <tbody>
             <tr><td>Mar 2023</td><td>Claude 1</td><td>Constitutional AI in production. Strong refusal handling. 100k context window from Claude 1.3.</td></tr>
-            <tr><td>Jul 2023</td><td>Claude 2</td><td>200k context. Stronger reasoning. First broad enterprise contracts.</td></tr>
+            <tr><td>Jul 2023</td><td>Claude 2</td><td>100k context (200k from Claude 2.1, Nov 2023). Stronger reasoning. First broad enterprise contracts.</td></tr>
             <tr><td>Mar 2024</td><td>Claude 3 (Haiku, Sonnet, Opus)</td><td>Three-tier line. Opus competitive with GPT-4. Vision capability native.</td></tr>
             <tr><td>Jun 2024</td><td>Claude 3.5 Sonnet</td><td>Step jump on coding benchmarks (HumanEval, SWE-bench). Becomes the default coding model for many teams.</td></tr>
             <tr><td>Oct 2024</td><td>Claude 3.5 Sonnet (new) + Computer Use</td><td>First production GUI-controlling agent from a frontier lab.</td></tr>
-            <tr><td>2025</td><td>Claude 3.7, Claude 4 (Opus / Sonnet / Haiku), extended thinking</td><td>Test-time-compute integration. Claude becomes one of two top-tier coding models with GPT-5.</td></tr>
+            <tr><td>2025</td><td>Claude 3.7, Claude 4 (Opus / Sonnet; Haiku 4.5 in Oct), extended thinking</td><td>Test-time-compute integration. Claude becomes one of two top-tier coding models with GPT-5.</td></tr>
             <tr><td>Late 2025 &rarr; 2026</td><td>Claude 4.5, 4.6, 4.7 with 1 M-token context</td><td>Long-context generally available; agent-style use becomes default for developer audiences.</td></tr>
         </tbody>
     </table>
@@ -341,7 +341,7 @@
             <p>Materially uplift a malicious actor on a CBRN threat or autonomous-replication threat. Triggers stronger evaluations, deployment safeguards (jailbreak resistance benchmarks), red-team requirements, and limits on weights distribution.</p>
         </div>
         <div class="diagram-panel r">
-            <h4>ASL-4 (not yet reached)</h4>
+            <h4>ASL-4 (not yet reached as of RSP v3.0, Feb 2026)</h4>
             <p>Models capable of substantially autonomously executing tasks that would otherwise require nation-state-level resources. Requires hardened security (intent: defend against well-resourced adversaries including state actors trying to exfiltrate weights), independent red-team approval to deploy, and multi-stakeholder oversight.</p>
         </div>
         <div class="diagram-panel r">
@@ -359,7 +359,7 @@
 <section class="slide" id="slide-07">
     <div class="slide-number">07</div>
     <h2>Mechanistic Interpretability &mdash; the Anthropic Programme</h2>
-    <p>Mechanistic interpretability is the attempt to reverse-engineer trained neural networks at the level of individual circuits and features &mdash; to understand <em>what computation</em> is happening, not just whether a model gives the right answer. <strong>Chris Olah</strong> has been the central figure in this since the late 2010s, originally at OpenAI, then at Anthropic from the founding.</p>
+    <p>Mechanistic interpretability is the attempt to reverse-engineer trained neural networks at the level of individual circuits and features &mdash; to understand <em>what computation</em> is happening, not just whether a model gives the right answer. <strong>Chris Olah</strong> has been the central figure in this since the late 2010s, originally at Google Brain and OpenAI, then at Anthropic from the founding.</p>
 
     <h3>The Anthropic interp programme in stages</h3>
     <div class="table-wrap">
@@ -369,7 +369,7 @@
             <tr><td>2021</td><td>A Mathematical Framework for Transformer Circuits</td><td>Defines the basic building blocks for analysing attention-based circuits.</td></tr>
             <tr><td>2022</td><td>In-Context Learning and Induction Heads</td><td>Identifies a specific circuit (induction heads) that mechanistically implements in-context learning.</td></tr>
             <tr><td>2022</td><td>Toy Models of Superposition</td><td>Explains why circuits are hard to identify: features are stored in superposition.</td></tr>
-            <tr><td>2024</td><td>Sparse autoencoders / dictionary learning</td><td>Practical recipe for extracting interpretable features from production models. <em>Scaling Monosemanticity</em> applies this to Claude 3 Sonnet.</td></tr>
+            <tr><td>2023&ndash;24</td><td>Sparse autoencoders / dictionary learning</td><td>Practical recipe for extracting interpretable features (<em>Towards Monosemanticity</em>, Oct 2023). <em>Scaling Monosemanticity</em> applies this to Claude 3 Sonnet.</td></tr>
             <tr><td>2025</td><td>Circuit tracing / attribution graphs (<em>On the Biology of a Large Language Model</em>)</td><td>Tracing and intervening on multi-step computations in Claude 3.5 Haiku through interpretable features. The first plausibly safety-relevant interpretability tooling.</td></tr>
         </tbody>
     </table>
@@ -515,7 +515,7 @@
 
     <div class="quote">
         I am scared of the technology I work on. That fear is the central organising principle of how we build this company.
-        <span class="attr">&mdash; Dario Amodei has expressed this sentiment in multiple interviews and podcasts; the precise phrasing varies but the position has been consistent since the founding.</span>
+        <span class="attr">&mdash; Dario Amodei has expressed this sentiment in multiple interviews and podcasts (a paraphrase, not a verbatim quote); the precise phrasing varies but the position has been consistent since the founding.</span>
     </div>
 
     <div class="callout y">
